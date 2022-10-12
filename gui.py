@@ -31,8 +31,8 @@ class window(Tk):
         )
         self.c.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-        self.sosImage = PhotoImage(file=f"./sosButton{mode}.png")
-        self.reminderImage = PhotoImage(file=f"./reminderButton{mode}.png")
+        self.sosImage = PhotoImage(file=f"/home/pi/Desktop/Ajjisstant-GUI/sosButton{mode}.png")
+        self.reminderImage = PhotoImage(file=f"/home/pi/Desktop/Ajjisstant-GUI/reminderButton{mode}.png")
 
         self.sosFrame = Frame(self, height=80, width=80, bg=self.back)
         self.reminderFrame = Frame(self, height=80, width=80, bg=self.back)
