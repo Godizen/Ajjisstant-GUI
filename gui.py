@@ -3,7 +3,9 @@ import datetime as dt
 import threading
 import time
 
+
 class window(Tk):
+
     def __init__(self, mode="Dark"):
         Tk.__init__(self)
 
@@ -16,11 +18,17 @@ class window(Tk):
         else:
             exit()
 
-        #self.attributes("-fullscreen", True)
+        # self.attributes("-fullscreen", True)
         self.geometry("480x800")
-        self.height=800#self.winfo_screenheight()
-        self.width=480#self.winfo_screenwidth()
-        self.c = Canvas(self, bg=self.back, height=self.height, width=self.width, highlightthickness=0)
+        self.height = 800  # self.winfo_screenheight()
+        self.width = 480  # self.winfo_screenwidth()
+        self.c = Canvas(
+            self,
+            bg=self.back,
+            height=self.height,
+            width=self.width,
+            highlightthickness=0,
+        )
         self.c.place(relx=0.5, rely=0.5, anchor=CENTER)
 
         self.sosImage = PhotoImage(file=f"./sosButton{mode}.png")
@@ -29,15 +37,31 @@ class window(Tk):
         self.sosFrame = Frame(self, height=80, width=80, bg=self.back)
         self.reminderFrame = Frame(self, height=80, width=80, bg=self.back)
 
-        self.sosButton = Button(self.sosFrame, image=self.sosImage, bg=self.back, command=self.SOS, relief=SUNKEN)
+        self.sosButton = Button(
+            self.sosFrame,
+            image=self.sosImage,
+            bg=self.back,
+            command=self.SOS,
+            relief=SUNKEN,
+        )
         self.sosFrame.place(relx=0.085, rely=0.9495, anchor=CENTER)
         self.sosButton.place(relx=0.49, rely=0.49, anchor=CENTER)
 
-        self.remindButton = Button(self.reminderFrame, image=self.reminderImage, bg=self.back, command=self.reminder, relief=SUNKEN)
+        self.remindButton = Button(
+            self.reminderFrame,
+            image=self.reminderImage,
+            bg=self.back,
+            command=self.reminder,
+            relief=SUNKEN,
+        )
         self.reminderFrame.place(relx=0.255, rely=0.9495, anchor=CENTER)
         self.remindButton.place(relx=0.49, rely=0.49, anchor=CENTER)
 
-        self.timeLabel = Label(self, text=self.timeGet(), bg=self.back, fg=self.front, font=("Arial", 12))
+        self.timeLabel = Label(self,
+                               text=self.timeGet(),
+                               bg=self.back,
+                               fg=self.front,
+                               font=("Arial", 12))
         self.timeLabel.place(relx=0.8, rely=0.95, anchor=CENTER)
 
         def updateTime():
@@ -47,26 +71,26 @@ class window(Tk):
 
         threading.Thread(target=updateTime, daemon=True).start()
 
-        self.mainloop() 
+        self.mainloop()
 
     def SOS(self):
-        #TODO - Me
+        # TODO - Me
         pass
-    
+
     def reminder(self):
-        #TODO - Shamantha
+        # TODO - Shamantha
         pass
 
     def birthday(self):
-        #TODO - Shamantha
+        # TODO - Shamantha
         pass
 
     def finance(self):
-        #TODO - Shamantha
+        # TODO - Shamantha
         pass
 
     def getSettings(self):
-        #TODO - Shamantha
+        # TODO - Shamantha
         pass
 
     def timeGet(self):
@@ -76,22 +100,22 @@ class window(Tk):
         day = str(int(t.strftime("%d")))
         year = t.strftime("%Y")
         hourMinute = t.strftime("%H:%M")
-        return (weekday + "\n" + month + " " + day + " " + year + "\n" + hourMinute)
+        return weekday + "\n" + month + " " + day + " " + year + "\n" + hourMinute
 
     def medicine(self):
-        #TODO - Sanath
+        # TODO - Sanath
         pass
 
     def alarm(self):
-        #TODO - Sanath
+        # TODO - Sanath
         pass
 
     def food(self):
-        #TODO - Sanath
+        # TODO - Sanath
         pass
 
     def walk(self):
-        #TODO - Sanath
+        # TODO - Sanath
         pass
 
 x=window(mode="Light")
