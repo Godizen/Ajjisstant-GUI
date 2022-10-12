@@ -119,4 +119,4 @@ class window(Tk):
         pass
 
 
-x = window(mode="Dark")
+x = window(mode="Light")
