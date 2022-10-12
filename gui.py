@@ -94,5 +94,5 @@ class window(Tk):
         #TODO - Sanath
         pass
 
-x=window(mode="Dark")
+x=window(mode="Light")
 
