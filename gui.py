@@ -77,7 +77,7 @@ class window(Tk):
         pass
 
     def reminder(self):
-        # TODO - Shamantha
+        # TODO - Me
         pass
 
     def birthday(self):
