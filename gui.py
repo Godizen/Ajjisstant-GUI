@@ -2,6 +2,7 @@ from tkinter import *
 import datetime as dt
 import threading
 import time
+from gsmmodem.modem import GsmModem
 
 
 class window(Tk):
@@ -73,8 +74,35 @@ class window(Tk):
         self.mainloop()
 
     def SOS(self):
-        # TODO - Me
-        pass
+        PORT = '/dev/serial0'
+        BAUDRATE = 115200
+        NUMBER = '+919449087092'
+        PIN = None
+        waitingForModemToRespondInSeconds = 10
+
+
+        modem = GsmModem(PORT, BAUDRATE)
+        modem.connect(PIN,waitingForModemToRespondInSeconds)
+        modem.waitForNetworkCoverage(30)
+        call = modem.dial(NUMBER)
+        wasAnswered = False
+        while call.active:
+            if call.answered:
+                wasAnswered = True
+                time.sleep(3.0)
+                try:
+                    if call.active:
+                        print('Hanging up call...')
+                        call.hangup()
+                        print('Call has been ended by remote party')
+                except:
+                    pass
+            else:
+                time.sleep(0.5)
+        if not wasAnswered:
+            print('Call was not answered by remote party')
+        print('Done.')
+        modem.close()
 
     def reminder(self):
         # TODO - Shamantha
@@ -118,4 +146,4 @@ class window(Tk):
         pass
 
 
-x = window(mode="Light")
+x = window(mode="Dark")
