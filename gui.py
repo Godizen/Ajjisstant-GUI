@@ -36,10 +36,9 @@ class window(Tk):
         else:
             exit()
 
-        # self.attributes("-fullscreen", True)
-        self.geometry("480x800")
-        self.height = 800  # self.winfo_screenheight()
-        self.width = 480  # self.winfo_screenwidth()
+        self.attributes("-fullscreen", True)
+        self.height = self.winfo_screenheight()
+        self.width = self.winfo_screenwidth()
 
         self.mainPage()
 
