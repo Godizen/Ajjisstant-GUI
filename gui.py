@@ -5,8 +5,8 @@ import time
 from gsmmodem.modem import GsmModem
 from cryptography.fernet import Fernet
 import os, csv
-import playsound
 import speech_recognition as sr
+import pygame
 
 if not os.path.exists("/home/pi/Desktop/Ajjisstant-GUI/filekey.lib"):
     key = Fernet.generate_key()
@@ -19,6 +19,7 @@ with open("/home/pi/Desktop/Ajjisstant-GUI/filekey.key", "rb") as filekey:
     key = filekey.read()
 fernet = Fernet(key)
 
+pygame.mixer.init()
 
 class window(Tk):
 
@@ -171,7 +172,9 @@ class window(Tk):
         self.mainPage()
 
     def playback(self):
-        playsound.playsound("/home/pi/Desktop/Ajjisstant-GUI/reminder.wav")
+        sound = pygame.mixer.Sound("/home/pi/Desktop/Ajjisstant-GUI/reminder.wav")
+        pygame.mixer.Sound.set_volume(sound, 1)
+        sound.play()
 
     def recordReminder(self):
         rec = sr.Recognizer()
