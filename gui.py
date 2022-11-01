@@ -21,6 +21,7 @@ fernet = Fernet(key)
 
 pygame.mixer.init()
 
+
 class window(Tk):
 
     def __init__(self, mode="Dark"):
@@ -172,7 +173,8 @@ class window(Tk):
         self.mainPage()
 
     def playback(self):
-        sound = pygame.mixer.Sound("/home/pi/Desktop/Ajjisstant-GUI/reminder.wav")
+        sound = pygame.mixer.Sound(
+            "/home/pi/Desktop/Ajjisstant-GUI/reminder.wav")
         pygame.mixer.Sound.set_volume(sound, 1)
         sound.play()
 
