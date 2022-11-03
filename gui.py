@@ -11,14 +11,14 @@ import requests
 import pickle
 import random
 
-if not os.path.exists("./filekey.lib"):
+if not os.path.exists("/home/pi/Desktop/Ajjisstant-GUI/filekey.lib"):
     key = Fernet.generate_key()
-    with open("./filekey.key", "wb") as filekey:
+    with open("/home/pi/Desktop/Ajjisstant-GUI/filekey.key", "wb") as filekey:
         filekey.write(key)
-    create = open("./f.file", "wb")
+    create = open("/home/pi/Desktop/Ajjisstant-GUI/f.file", "wb")
     create.close()
 
-with open("./filekey.key", "rb") as filekey:
+with open("/home/pi/Desktop/Ajjisstant-GUI/filekey.key", "rb") as filekey:
     key = filekey.read()
 fernet = Fernet(key)
 
@@ -77,7 +77,7 @@ class window(Tk):
             while True:
                 if dt.datetime.now().strftime("%H:%M") in self.alarmList:
                     sound = pygame.mixer.Sound(
-                        "./alarm.wav")
+                        "/home/pi/Desktop/Ajjisstant-GUI/alarm.wav")
                     pygame.mixer.Sound.set_volume(sound, 1)
                     sound.play()
         
@@ -120,10 +120,10 @@ class window(Tk):
         self.c.place(relx=0.5, rely=0.5, anchor=CENTER)
 
         self.sosImage = PhotoImage(
-            file=f"./sosButton{self.mode}.png")
+            file=f"/home/pi/Desktop/Ajjisstant-GUI/sosButton{self.mode}.png")
         self.reminderImage = PhotoImage(
             file=
-            f"./reminderButton{self.mode}.png")
+            f"/home/pi/Desktop/Ajjisstant-GUI/reminderButton{self.mode}.png")
 
         self.sosFrame = Frame(self.mainframe,
                               height=80,
@@ -336,7 +336,7 @@ class window(Tk):
         self.backFrame.place(relx=0.5, rely=0.9, anchor=CENTER)
         self.backButton.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-        if os.path.exists("./reminder.wav"):
+        if os.path.exists("/home/pi/Desktop/Ajjisstant-GUI/reminder.wav"):
             self.show = Button(self.reminderFrame,
                                text="Play",
                                command=self.playback)
@@ -356,13 +356,13 @@ class window(Tk):
         self.mainPage()
 
     def deleteSound(self):
-        os.remove("./reminder.wav")
+        os.remove("/home/pi/Desktop/Ajjisstant-GUI/reminder.wav")
         self.reminderFrame.destroy()
         self.mainPage()
 
     def playback(self):
         sound = pygame.mixer.Sound(
-            "./reminder.wav")
+            "/home/pi/Desktop/Ajjisstant-GUI/reminder.wav")
         pygame.mixer.Sound.set_volume(sound, 1)
         sound.play()
 
@@ -371,7 +371,7 @@ class window(Tk):
         mic = sr.Microphone()
         with mic as source:
             audio = rec.listen(source)
-        open("./reminder.wav",
+        open("/home/pi/Desktop/Ajjisstant-GUI/reminder.wav",
              "wb").write(audio.get_wav_data())
         self.reminderFrame.destroy()
         self.mainPage()
@@ -380,7 +380,7 @@ class window(Tk):
         while True:
             todays_date = dt.datetime.now()
             self.namelist = []
-            with open("./bday.csv", newline="") as birthday_file:
+            with open("/home/pi/Desktop/Ajjisstant-GUI/bday.csv", newline="") as birthday_file:
                 date_sequence = csv.reader(birthday_file)
                 for dates in date_sequence:
                     if "/".join((dates[1].split("/")[0], dates[1].split("/")[1])) == (todays_date.strftime("%d/%m")):
@@ -433,7 +433,7 @@ class window(Tk):
         self.mainPage()
 
     def get_details(self):
-        self.financefile = open("./f.file", "rb")
+        self.financefile = open("/home/pi/Desktop/Ajjisstant-GUI/f.file", "rb")
         self.enc_fin = self.financefile.read()
         self.financefile.close()
 
@@ -504,7 +504,7 @@ class window(Tk):
                     self.content += "\n"
                 
                 self.enc_shit = fernet.encrypt(self.content[:-1].encode())
-                with open("./f.file", "wb") as file:
+                with open("/home/pi/Desktop/Ajjisstant-GUI/f.file", "wb") as file:
                     file.write(self.enc_shit)
                 self.get_details()
                 time.sleep(7200)
@@ -591,7 +591,7 @@ class window(Tk):
 
         try:
             self.birthdays = requests.get('https://old-person.herokuapp.com/birthdays/select?username=test').json()["data"][1]
-            newfile = open("./bday.csv", "w", newline="")
+            newfile = open("/home/pi/Desktop/Ajjisstant-GUI/bday.csv", "w", newline="")
             writ = csv.writer(newfile)
             for i in self.birthdays:
                 writ.writerow([i, self.birthdays[i]])
@@ -605,7 +605,7 @@ class window(Tk):
             self.medicineList = []
             for i in x:
                 self.medicineList.append({"name":i, "time":x[i]["time"], "dosage":x[i]["dosage"], "inventory":x[i]["inventory"]})
-            newfile = open("./medicines.txt", "wb")
+            newfile = open("/home/pi/Desktop/Ajjisstant-GUI/medicines.txt", "wb")
             pickle.dump(self.medicineList, newfile)
             newfile.close()
         except:
