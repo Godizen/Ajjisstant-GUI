@@ -11,7 +11,7 @@ import requests
 import pickle
 import random
 
-if not os.path.exists("/home/pi/Desktop/Ajjisstant-GUI/filekey.lib"):
+if not os.path.exists("/home/pi/Desktop/Ajjisstant-GUI/filekey.key"):
     key = Fernet.generate_key()
     with open("/home/pi/Desktop/Ajjisstant-GUI/filekey.key", "wb") as filekey:
         filekey.write(key)
@@ -25,13 +25,13 @@ fernet = Fernet(key)
 pygame.mixer.init()
 
 foodQuoteList = [
-    "Add 2 bananas today before or after food. \nBananas regulate your blood pressure, they provide you \nwith energy and have a positive influence on your digestion. \nit is very rich in fibres, which makes it ideal when it comes to \nintestinal problems. ",
-    "Add an Apple today before or after food. \nApples are an incredibly nutritious fruit that offers \nmultiple health benefits. They’re rich in fiber and antioxidants. \nEating them is linked to a lower risk of many chronic \nconditions, including diabetes, heart disease, and cancer. \nApples may also promote weight loss and \nimprove gut and brain health.",
+    "Add 2 bananas today before or after food. \nBananas regulate your blood pressure, they \nprovide you with energy and have a positive \ninfluence on your digestion. \nit is very rich in fibres, which makes \nit ideal when it comes to \nintestinal problems. ",
+    "Add an Apple today before or after food. \nApples are an incredibly nutritious fruit that \noffers multiple health benefits. They’re \nrich in fiber and antioxidants. \nEating them is linked to a lower risk \nof many chronic conditions, including \ndiabetes, heart disease, and cancer. \nApples may also promote weight loss and \nimprove gut and brain health.",
     "Add an Orange today before or after food. \nThe fiber in oranges can keep blood sugar levels \nin check and reduce high cholesterol to \nprevent cardiovascular disease.",
-    "Add some slices of papaya today before or after food. \nA medium-sized papaya contains more than 200% of the vitamin C \nyou need per day, helping to reduce the \nrisk of heart disease and boost the immune system.",
-    "Add dry fruits like Dehydrated Grapes/ Almonds/ Walnuts \nto your food today. Dry fruits are rich medium of carbohydrates \nand dietary fibers which help in bowel movements.Decreases cholestrol levels heart diseases, good for a healthy skin",
-    "Add Grapes today before or after food. \nThey’re a rich source of beneficial plant compounds \nthat have been linked to numerous health \nbenefits, such as a lowered risk of heart \ndisease and certain types of cancer.",
-    "Add few slices of watermelons today before or after food. \nThe nutrient in watermelons may also decrease the risk of heart \ndisease, cancer, and type 2 diabetes, \ndecrease effect of sunburn,hydrates your body",
+    "Add some slices of papaya today before or \nafter food. A medium-sized papaya contains more \nthan 200% of the vitamin C you need per \nday, helping to reduce the \nrisk of heart disease and boost the immune system.",
+    "Add dry fruits like Dehydrated Grapes/ \nAlmonds/ Walnuts to your food today. Dry fruits are \nrich medium of carbohydrates and dietary \nfibers which help in bowel movements.\nDecreases cholestrol levels heart \ndiseases, good for a healthy skin",
+    "Add Grapes today before or after food. \nThey’re a rich source of beneficial plant compounds \nthat have been linked to numerous health \nbenefits, such as a lowered \nrisk of heart disease and certain types of cancer.",
+    "Add few slices of watermelons today before \nor after food. The nutrient in watermelons may also \ndecrease the risk of heart disease, \ncancer, and type 2 diabetes, \ndecrease effect of sunburn,hydrates your body",
 ]
 
 
@@ -69,20 +69,20 @@ class window(Tk):
         def getServerDetails():
             while True:
                 self.servDets()
-                time.sleep(3600)
+                time.sleep(60)
 
         threading.Thread(target=getServerDetails, daemon=True).start()
 
         def alarm():
             time.sleep(5)
             while True:
-                if dt.datetime.now().strftime("%H:%M") in self.alarmList:
-                    sound = pygame.mixer.Sound(
-                        "/home/pi/Desktop/Ajjisstant-GUI/alarm.wav")
-                    pygame.mixer.Sound.set_volume(sound, 1)
-                    sound.play()
+                t = dt.datetime.now().strftime("%H:%M")
+                if t in self.alarmList or t in self.medTimes or t == "22:33":
+                    self.alarmPage()
+                    time.sleep(60)
 
         threading.Thread(target=alarm, daemon=True).start()
+
         try:
             self.alarmList = pickle.load(open("alarms.txt", "rb"))
             self.emergencyContacts = pickle.load(open("emergency.txt", "rb"))
@@ -102,6 +102,7 @@ class window(Tk):
         threading.Thread(target=Food, daemon=True).start()
         threading.Thread(target=self.financeFile, daemon=True).start()
 
+        self.get_details()
         self.mainPage()
 
     def mainPage(self):
@@ -136,8 +137,8 @@ class window(Tk):
                                    bg=self.back)
 
         self.medicineFrame = Frame(self.mainframe,
-                                   height=80,
-                                   width=80,
+                                   height=100,
+                                   width=450,
                                    bg=self.back)
 
         self.callFrame = Frame(self.mainframe,
@@ -145,14 +146,9 @@ class window(Tk):
                                width=80,
                                bg=self.back)
 
-        self.bdayFrame = Frame(self.mainframe,
-                               height=80,
-                               width=80,
-                               bg=self.back)
-
         self.financeFrame = Frame(self.mainframe,
-                                  height=80,
-                                  width=80,
+                                  height=100,
+                                  width=450,
                                   bg=self.back)
 
         self.sosButton = Button(
@@ -161,6 +157,7 @@ class window(Tk):
             bg=self.back,
             command=lambda: self.SOS("+918073289563"),
             relief=SUNKEN,
+            font=("Arial", 15)
         )
         self.sosFrame.place(relx=0.085, rely=0.9495, anchor=CENTER)
         self.sosButton.place(relx=0.49, rely=0.49, anchor=CENTER)
@@ -171,6 +168,7 @@ class window(Tk):
             bg=self.back,
             command=self.reminder,
             relief=SUNKEN,
+            font=("Arial", 15)
         )
         self.reminderFrame.place(relx=0.255, rely=0.9495, anchor=CENTER)
         self.remindButton.place(relx=0.49, rely=0.49, anchor=CENTER)
@@ -180,7 +178,7 @@ class window(Tk):
             text=self.timeGet(),
             bg=self.back,
             fg=self.front,
-            font=("Arial", 12),
+            font=("Arial", 15),
         )
         self.timeLabel.place(relx=0.8, rely=0.95, anchor=CENTER)
 
@@ -189,19 +187,24 @@ class window(Tk):
             text=random.choice(foodQuoteList),
             bg=self.back,
             fg=self.front,
-            font=("Arial", 12),
+            font=("Arial", 15),
             width=450,
         )
 
         self.foodLabel.place(relx=0.5, rely=0.7, anchor=CENTER)
 
+        u = ("Name: " + self.medicineList[0]["name"] + "    " +
+                 "Times: " + ", ".join(self.medicineList[0]["time"]) + "\n" +
+                 "Per Tablet: " + self.medicineList[0]["dosage"] + "    " +
+                 "Left: " + str(self.medicineList[0]["inventory"]))
         self.medicineButton = Button(
             self.medicineFrame,
-            text="MEDICINE",
+            text=u,
             bg=self.back,
             fg=self.front,
             command=self.medicine,
             relief=SUNKEN,
+            font=("Arial", 15)
         )
 
         self.medicineFrame.place(relx=0.5, rely=0.2, anchor=CENTER)
@@ -214,36 +217,139 @@ class window(Tk):
             fg=self.front,
             command=self.call,
             relief=SUNKEN,
+            font=("Arial", 15)
         )
 
         self.callFrame.place(relx=0.45, rely=0.95, anchor=CENTER)
         self.callButton.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-        self.bdayButton = Button(
-            self.bdayFrame,
-            text="BDAYS",
-            bg=self.back,
-            fg=self.front,
-            command=self.birthdayWINDOW,
-            relief=SUNKEN,
-        )
-
-        self.bdayFrame.place(relx=0.5, rely=0.3, anchor=CENTER)
-        self.bdayButton.place(relx=0.5, rely=0.5, anchor=CENTER)
-
+        t = ("Number: " + self.finance[0]["accno"] + "\nBranch: " +
+                 self.finance[0]["branch"] + "    Loan: " +
+                 self.finance[0]["loans"] + " Rupees")
         self.financeButton = Button(
             self.financeFrame,
-            text="FINANCE",
+            text=t,
             bg=self.back,
             fg=self.front,
             command=self.financeWINDOW,
             relief=SUNKEN,
+            font=("Arial", 15)
         )
 
         self.financeFrame.place(relx=0.5, rely=0.1, anchor=CENTER)
         self.financeButton.place(relx=0.5, rely=0.5, anchor=CENTER)
 
+        self.bdayLabelList = []
+
+        for i in range(len(self.namelist)):
+            if self.namelist[i][0] in (
+                    "Electricity Bill",
+                    "Rent",
+                    "Pension - VISIT BANK",
+            ):
+                t = self.namelist[i][0]
+            else:
+                t = self.namelist[i][0] + " turns " + self.namelist[i][
+                    1] + " today."
+            self.bdayLabelList.append(
+                Label(
+                    self.mainFrame,
+                    text=t,
+                    bg=self.back,
+                    fg=self.front,
+                    font=("Arial", 15),
+                    width=450,
+                ))
+            self.bdayLabelList[i].place(relx=0.5,
+                                        rely=0.3 + 0.1 * (i + 1),
+                                        anchor=CENTER)
+
         self.mainloop()
+
+        while True:
+            if self.soundALARM:
+                self.alarmPage()
+
+    def alarmPage(self):
+        self.soundALARM = False
+        self.mainframe.destroy()
+        t = dt.datetime.now().strftime("%H:%M")
+
+        alarmText = ""
+        if t in self.alarmList:
+            alarmText += "Wake Up\n"
+        
+        if t in self.medTimes:
+            for i in self.medTimeDict:
+                if t in self.medTimeDict[i]:
+                    alarmText += f"Take one {i}\n"
+        
+        if t == "16:00":
+            alarmText += "Take a walk"
+
+        self.sound = pygame.mixer.Sound(
+                        "/home/pi/Desktop/Ajjisstant-GUI/alarm.wav")
+        pygame.mixer.Sound.set_volume(self.sound, 1)
+        self.sound.play(2)
+
+        self.alarmFrame = Frame(self,
+                              height=self.height,
+                              width=self.width,
+                              background=self.back)
+        self.alarmFrame.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+        self.alarmLabel = Label(
+            self.alarmFrame,
+            text=alarmText,
+            bg=self.back,
+            fg=self.front,
+            font=("Arial", 15),
+        )
+        self.alarmLabel.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+        self.sosFrame = Frame(self.alarmFrame,
+                              height=80,
+                              width=80,
+                              bg=self.back)
+
+        self.sosButton = Button(
+            self.sosFrame,
+            image=self.sosImage,
+            bg=self.back,
+            command=lambda: self.SOS("+918073289563"),
+            relief=SUNKEN,
+            font=("Arial", 15)
+        )
+
+        self.sosFrame.place(relx=0.085, rely=0.9495, anchor=CENTER)
+        self.sosButton.place(relx=0.49, rely=0.49, anchor=CENTER)
+
+        self.stopFrame = Frame(self.alarmFrame,
+                               height=80,
+                               width=80,
+                               bg=self.back)
+
+        self.stopButton = Button(
+            self.stopFrame,
+            text="stop",
+            bg=self.back,
+            fg=self.front,
+            command=self.stopAlarm,
+            relief=SUNKEN,
+            font=("Arial", 15)
+        )
+
+        self.stopFrame.place(relx=0.5, rely=0.9, anchor=CENTER)
+        self.stopButton.place(relx=0.5, rely=0.5, anchor=CENTER)
+        time.sleep(34)
+        self.SOS("+918073289563")
+        
+        self.stopAlarm()
+        
+    def stopAlarm(self):
+        self.sound.stop()
+        self.alarmFrame.destroy()
+        self.mainPage()
 
     def call(self):
         self.mainframe.destroy()
@@ -254,6 +360,22 @@ class window(Tk):
                              background=self.back)
         self.callWin.place(relx=0.5, rely=0.5, anchor=CENTER)
 
+        self.sosFrame = Frame(self.callWin,
+                              height=80,
+                              width=80,
+                              bg=self.back)
+
+        self.sosButton = Button(
+            self.sosFrame,
+            image=self.sosImage,
+            bg=self.back,
+            command=lambda: self.SOS("+918073289563"),
+            relief=SUNKEN,
+            font=("Arial", 15)
+        )
+        self.sosFrame.place(relx=0.085, rely=0.9495, anchor=CENTER)
+        self.sosButton.place(relx=0.49, rely=0.49, anchor=CENTER)
+
         self.backFrame = Frame(self.callWin, height=80, width=80, bg=self.back)
 
         self.backButton = Button(
@@ -263,6 +385,7 @@ class window(Tk):
             fg=self.front,
             command=self.exitCall,
             relief=SUNKEN,
+            font=("Arial", 15)
         )
 
         self.emergencyButtonsList = []
@@ -277,6 +400,7 @@ class window(Tk):
                     fg=self.front,
                     command=lambda: self.SOS(self.emergencyContacts[names[i]]),
                     relief=SUNKEN,
+            font=("Arial", 15)
                 ))
             self.emergencyButtonsList[i].place(relx=0.5, rely=0.1 * i)
 
@@ -288,33 +412,36 @@ class window(Tk):
         self.mainPage()
 
     def SOS(self, NUMBER):
-        PORT = "/dev/serial0"
-        BAUDRATE = 115200
-        PIN = None
-        waitingForModemToRespondInSeconds = 10
+        try:
+            PORT = "/dev/serial0"
+            BAUDRATE = 115200
+            PIN = None
+            waitingForModemToRespondInSeconds = 10
 
-        modem = GsmModem(PORT, BAUDRATE)
-        modem.connect(PIN, waitingForModemToRespondInSeconds)
-        modem.waitForNetworkCoverage(30)
-        call = modem.dial(NUMBER)
-        wasAnswered = False
-        while call.active:
-            if call.answered:
-                wasAnswered = True
-                time.sleep(3.0)
-                try:
-                    if call.active:
-                        print("Hanging up call...")
-                        call.hangup()
-                        print("Call has been ended by remote party")
-                except:
-                    pass
-            else:
-                time.sleep(0.5)
-        if not wasAnswered:
-            print("Call was not answered by remote party")
-        print("Done.")
-        modem.close()
+            modem = GsmModem(PORT, BAUDRATE)
+            modem.connect(PIN, waitingForModemToRespondInSeconds)
+            modem.waitForNetworkCoverage(30)
+            call = modem.dial(NUMBER)
+            wasAnswered = False
+            while call.active:
+                if call.answered:
+                    wasAnswered = True
+                    time.sleep(3.0)
+                    try:
+                        if call.active:
+                            print("Hanging up call...")
+                            call.hangup()
+                            print("Call has been ended by remote party")
+                    except:
+                        pass
+                else:
+                    time.sleep(0.5)
+            if not wasAnswered:
+                print("Call was not answered by remote party")
+            print("Done.")
+            modem.close()
+        except:
+            pass
 
     def reminder(self):
         self.mainframe.destroy()
@@ -324,6 +451,22 @@ class window(Tk):
                                    width=self.width,
                                    background=self.back)
         self.reminderFrame.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+        self.sosFrame = Frame(self.reminderFrame,
+                              height=80,
+                              width=80,
+                              bg=self.back)
+
+        self.sosButton = Button(
+            self.sosFrame,
+            image=self.sosImage,
+            bg=self.back,
+            command=lambda: self.SOS("+918073289563"),
+            relief=SUNKEN,
+            font=("Arial", 15)
+        )
+        self.sosFrame.place(relx=0.085, rely=0.9495, anchor=CENTER)
+        self.sosButton.place(relx=0.49, rely=0.49, anchor=CENTER)
 
         self.backFrame = Frame(self.reminderFrame,
                                height=80,
@@ -337,6 +480,7 @@ class window(Tk):
             fg=self.front,
             command=self.exitReminder,
             relief=SUNKEN,
+            font=("Arial", 15)
         )
 
         self.backFrame.place(relx=0.5, rely=0.9, anchor=CENTER)
@@ -402,59 +546,6 @@ class window(Tk):
                     self.namelist.append(("Pension - VISIT BANK", 0))
             time.sleep(7200)
 
-    def birthdayWINDOW(self):
-        self.mainframe.destroy()
-        self.birthdayFrame = Frame(self,
-                                   height=self.height,
-                                   width=self.width,
-                                   background=self.back)
-        self.birthdayFrame.place(relx=0.5, rely=0.5, anchor=CENTER)
-
-        self.backFrame = Frame(self.birthdayFrame,
-                               height=80,
-                               width=80,
-                               bg=self.back)
-
-        self.backButton = Button(
-            self.backFrame,
-            text="back",
-            bg=self.back,
-            fg=self.front,
-            command=self.exitBirthdays,
-            relief=SUNKEN,
-        )
-
-        self.backFrame.place(relx=0.5, rely=0.9, anchor=CENTER)
-        self.backButton.place(relx=0.5, rely=0.5, anchor=CENTER)
-        self.bdayLabelList = []
-
-        for i in range(len(self.namelist)):
-            if self.namelist[i][0] in (
-                    "Electricity Bill",
-                    "Rent",
-                    "Pension - VISIT BANK",
-            ):
-                t = self.namelist[i][0]
-            else:
-                t = self.namelist[i][0] + " turns " + self.namelist[i][
-                    1] + " today."
-            self.bdayLabelList.append(
-                Label(
-                    self.birthdayFrame,
-                    text=t,
-                    bg=self.back,
-                    fg=self.front,
-                    font=("Arial", 12),
-                    width=450,
-                ))
-            self.bdayLabelList[i].place(relx=0.5,
-                                        rely=0.1 * (i + 1),
-                                        anchor=CENTER)
-
-    def exitBirthdays(self):
-        self.birthdayFrame.destroy()
-        self.mainPage()
-
     def get_details(self):
         self.financefile = open("/home/pi/Desktop/Ajjisstant-GUI/f.file", "rb")
         self.enc_fin = self.financefile.read()
@@ -481,6 +572,22 @@ class window(Tk):
                               background=self.back)
         self.finFrame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
+        self.sosFrame = Frame(self.finFrame,
+                              height=80,
+                              width=80,
+                              bg=self.back)
+
+        self.sosButton = Button(
+            self.sosFrame,
+            image=self.sosImage,
+            bg=self.back,
+            command=lambda: self.SOS("+918073289563"),
+            relief=SUNKEN,
+            font=("Arial", 15)
+        )
+        self.sosFrame.place(relx=0.085, rely=0.9495, anchor=CENTER)
+        self.sosButton.place(relx=0.49, rely=0.49, anchor=CENTER)
+
         self.backFrame = Frame(self.finFrame,
                                height=80,
                                width=80,
@@ -493,6 +600,7 @@ class window(Tk):
             fg=self.front,
             command=self.exitFinance,
             relief=SUNKEN,
+            font=("Arial", 15)
         )
 
         self.backFrame.place(relx=0.5, rely=0.9, anchor=CENTER)
@@ -501,16 +609,16 @@ class window(Tk):
         self.financeLabelList = []
 
         for i in range(len(self.finance)):
-            t = ("Number: " + self.finance[i]["accno"] + "        Branch: " +
-                 self.finance[i]["branch"] + "        Loan: " +
-                 self.finance[i]["loans"] + " Rupees")
+            t = ("Number: " + self.finance[0]["accno"] + "\nBranch: " +
+                 self.finance[0]["branch"] + "    Loan: " +
+                 self.finance[0]["loans"] + " Rupees")
             self.financeLabelList.append(
                 Label(
                     self.finFrame,
                     text=t,
                     bg=self.back,
                     fg=self.front,
-                    font=("Arial", 12),
+                    font=("Arial", 15),
                     width=450,
                 ))
             self.financeLabelList[i].place(relx=0.5,
@@ -544,8 +652,9 @@ class window(Tk):
                           "wb") as file:
                     file.write(self.enc_shit)
                 self.get_details()
-                time.sleep(7200)
+                time.sleep(60)
             except:
+                self.get_details()
                 time.sleep(30)
 
     def timeGet(self):
@@ -573,6 +682,23 @@ class window(Tk):
                               background=self.back)
         self.medFrame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
+        self.sosFrame = Frame(self.medFrame,
+                              height=80,
+                              width=80,
+                              bg=self.back)
+
+        self.sosButton = Button(
+            self.sosFrame,
+            image=self.sosImage,
+            bg=self.back,
+            command=lambda: self.SOS("+918073289563"),
+            relief=SUNKEN,
+            font=("Arial", 15)
+        )
+
+        self.sosFrame.place(relx=0.085, rely=0.9495, anchor=CENTER)
+        self.sosButton.place(relx=0.49, rely=0.49, anchor=CENTER)
+
         self.backFrame = Frame(self.medFrame,
                                height=80,
                                width=80,
@@ -585,6 +711,7 @@ class window(Tk):
             fg=self.front,
             command=self.exitMedicine,
             relief=SUNKEN,
+            font=("Arial", 15)
         )
 
         self.backFrame.place(relx=0.5, rely=0.9, anchor=CENTER)
@@ -592,9 +719,9 @@ class window(Tk):
         self.medLabelList = []
 
         for i in range(len(self.medicineList)):
-            t = ("Name: " + self.medicineList[i]["name"] + "        " +
+            t = ("Name: " + self.medicineList[i]["name"] + "    " +
                  "Times: " + ", ".join(self.medicineList[i]["time"]) + "\n" +
-                 "Per Tablet: " + self.medicineList[i]["dosage"] + "        " +
+                 "Per Tablet: " + self.medicineList[i]["dosage"] + "    " +
                  "Left: " + str(self.medicineList[i]["inventory"]))
             self.medLabelList.append(
                 Label(
@@ -602,7 +729,7 @@ class window(Tk):
                     text=t,
                     bg=self.back,
                     fg=self.front,
-                    font=("Arial", 12),
+                    font=("Arial", 15),
                     width=450,
                 ))
             self.medLabelList[i].place(relx=0.5,
@@ -612,10 +739,6 @@ class window(Tk):
     def exitMedicine(self):
         self.medFrame.destroy()
         self.mainPage()
-
-    def walk(self):
-        # TODO - Sanath
-        pass
 
     def servDets(self):
         try:
@@ -673,12 +796,31 @@ class window(Tk):
                     "dosage": x[i]["dosage"],
                     "inventory": x[i]["inventory"],
                 })
+            
             newfile = open("/home/pi/Desktop/Ajjisstant-GUI/medicines.txt",
                            "wb")
             pickle.dump(self.medicineList, newfile)
             newfile.close()
+
+            self.medTimeDict = {}
+            for i in x:
+                self.medTimeDict[i] = x[i]["time"]
+            
+            self.medTimes = set()
+            for i in x:
+                for j in x[i]["time"]:
+                    self.medTimes.add(j)
+
         except:
             self.medicineList = pickle.load(open("medicines.txt", "rb"))
+            self.medTimeDict = {}
+            for i in self.medicineList:
+                self.medTimeDict[i["name"]] = i["time"]
+            
+            self.medTimes = set()
+            for i in self.medicineList:
+                for j in i["time"]:
+                    self.medTimes.add(j)
 
 
 x = window(mode="Light")
