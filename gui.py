@@ -157,7 +157,7 @@ class window(Tk):
             bg=self.back,
             command=lambda: self.SOS("+918073289563"),
             relief=SUNKEN,
-            font=("Arial", 15)
+            font=("Arial", 15),
         )
         self.sosFrame.place(relx=0.085, rely=0.9495, anchor=CENTER)
         self.sosButton.place(relx=0.49, rely=0.49, anchor=CENTER)
@@ -168,7 +168,7 @@ class window(Tk):
             bg=self.back,
             command=self.reminder,
             relief=SUNKEN,
-            font=("Arial", 15)
+            font=("Arial", 15),
         )
         self.reminderFrame.place(relx=0.255, rely=0.9495, anchor=CENTER)
         self.remindButton.place(relx=0.49, rely=0.49, anchor=CENTER)
@@ -193,10 +193,10 @@ class window(Tk):
 
         self.foodLabel.place(relx=0.5, rely=0.7, anchor=CENTER)
 
-        u = ("Name: " + self.medicineList[0]["name"] + "    " +
-                 "Times: " + ", ".join(self.medicineList[0]["time"]) + "\n" +
-                 "Per Tablet: " + self.medicineList[0]["dosage"] + "    " +
-                 "Left: " + str(self.medicineList[0]["inventory"]))
+        u = ("Name: " + self.medicineList[0]["name"] + "    " + "Times: " +
+             ", ".join(self.medicineList[0]["time"]) + "\n" + "Per Tablet: " +
+             self.medicineList[0]["dosage"] + "    " + "Left: " +
+             str(self.medicineList[0]["inventory"]))
         self.medicineButton = Button(
             self.medicineFrame,
             text=u,
@@ -204,7 +204,7 @@ class window(Tk):
             fg=self.front,
             command=self.medicine,
             relief=SUNKEN,
-            font=("Arial", 15)
+            font=("Arial", 15),
         )
 
         self.medicineFrame.place(relx=0.5, rely=0.2, anchor=CENTER)
@@ -217,15 +217,15 @@ class window(Tk):
             fg=self.front,
             command=self.call,
             relief=SUNKEN,
-            font=("Arial", 15)
+            font=("Arial", 15),
         )
 
         self.callFrame.place(relx=0.45, rely=0.95, anchor=CENTER)
         self.callButton.place(relx=0.5, rely=0.5, anchor=CENTER)
 
         t = ("Number: " + self.finance[0]["accno"] + "\nBranch: " +
-                 self.finance[0]["branch"] + "    Loan: " +
-                 self.finance[0]["loans"] + " Rupees")
+             self.finance[0]["branch"] + "    Loan: " +
+             self.finance[0]["loans"] + " Rupees")
         self.financeButton = Button(
             self.financeFrame,
             text=t,
@@ -233,7 +233,7 @@ class window(Tk):
             fg=self.front,
             command=self.financeWINDOW,
             relief=SUNKEN,
-            font=("Arial", 15)
+            font=("Arial", 15),
         )
 
         self.financeFrame.place(relx=0.5, rely=0.1, anchor=CENTER)
@@ -278,24 +278,24 @@ class window(Tk):
         alarmText = ""
         if t in self.alarmList:
             alarmText += "Wake Up\n"
-        
+
         if t in self.medTimes:
             for i in self.medTimeDict:
                 if t in self.medTimeDict[i]:
                     alarmText += f"Take one {i}\n"
-        
+
         if t == "16:00":
             alarmText += "Take a walk"
 
         self.sound = pygame.mixer.Sound(
-                        "/home/pi/Desktop/Ajjisstant-GUI/alarm.wav")
+            "/home/pi/Desktop/Ajjisstant-GUI/alarm.wav")
         pygame.mixer.Sound.set_volume(self.sound, 1)
         self.sound.play(2)
 
         self.alarmFrame = Frame(self,
-                              height=self.height,
-                              width=self.width,
-                              background=self.back)
+                                height=self.height,
+                                width=self.width,
+                                background=self.back)
         self.alarmFrame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
         self.alarmLabel = Label(
@@ -318,7 +318,7 @@ class window(Tk):
             bg=self.back,
             command=lambda: self.SOS("+918073289563"),
             relief=SUNKEN,
-            font=("Arial", 15)
+            font=("Arial", 15),
         )
 
         self.sosFrame.place(relx=0.085, rely=0.9495, anchor=CENTER)
@@ -336,16 +336,16 @@ class window(Tk):
             fg=self.front,
             command=self.stopAlarm,
             relief=SUNKEN,
-            font=("Arial", 15)
+            font=("Arial", 15),
         )
 
         self.stopFrame.place(relx=0.5, rely=0.9, anchor=CENTER)
         self.stopButton.place(relx=0.5, rely=0.5, anchor=CENTER)
         time.sleep(34)
         self.SOS("+918073289563")
-        
+
         self.stopAlarm()
-        
+
     def stopAlarm(self):
         self.sound.stop()
         self.alarmFrame.destroy()
@@ -360,10 +360,7 @@ class window(Tk):
                              background=self.back)
         self.callWin.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-        self.sosFrame = Frame(self.callWin,
-                              height=80,
-                              width=80,
-                              bg=self.back)
+        self.sosFrame = Frame(self.callWin, height=80, width=80, bg=self.back)
 
         self.sosButton = Button(
             self.sosFrame,
@@ -371,7 +368,7 @@ class window(Tk):
             bg=self.back,
             command=lambda: self.SOS("+918073289563"),
             relief=SUNKEN,
-            font=("Arial", 15)
+            font=("Arial", 15),
         )
         self.sosFrame.place(relx=0.085, rely=0.9495, anchor=CENTER)
         self.sosButton.place(relx=0.49, rely=0.49, anchor=CENTER)
@@ -385,7 +382,7 @@ class window(Tk):
             fg=self.front,
             command=self.exitCall,
             relief=SUNKEN,
-            font=("Arial", 15)
+            font=("Arial", 15),
         )
 
         self.emergencyButtonsList = []
@@ -400,7 +397,7 @@ class window(Tk):
                     fg=self.front,
                     command=lambda: self.SOS(self.emergencyContacts[names[i]]),
                     relief=SUNKEN,
-            font=("Arial", 15)
+                    font=("Arial", 15),
                 ))
             self.emergencyButtonsList[i].place(relx=0.5, rely=0.1 * i)
 
@@ -463,7 +460,7 @@ class window(Tk):
             bg=self.back,
             command=lambda: self.SOS("+918073289563"),
             relief=SUNKEN,
-            font=("Arial", 15)
+            font=("Arial", 15),
         )
         self.sosFrame.place(relx=0.085, rely=0.9495, anchor=CENTER)
         self.sosButton.place(relx=0.49, rely=0.49, anchor=CENTER)
@@ -480,7 +477,7 @@ class window(Tk):
             fg=self.front,
             command=self.exitReminder,
             relief=SUNKEN,
-            font=("Arial", 15)
+            font=("Arial", 15),
         )
 
         self.backFrame.place(relx=0.5, rely=0.9, anchor=CENTER)
@@ -572,10 +569,7 @@ class window(Tk):
                               background=self.back)
         self.finFrame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-        self.sosFrame = Frame(self.finFrame,
-                              height=80,
-                              width=80,
-                              bg=self.back)
+        self.sosFrame = Frame(self.finFrame, height=80, width=80, bg=self.back)
 
         self.sosButton = Button(
             self.sosFrame,
@@ -583,7 +577,7 @@ class window(Tk):
             bg=self.back,
             command=lambda: self.SOS("+918073289563"),
             relief=SUNKEN,
-            font=("Arial", 15)
+            font=("Arial", 15),
         )
         self.sosFrame.place(relx=0.085, rely=0.9495, anchor=CENTER)
         self.sosButton.place(relx=0.49, rely=0.49, anchor=CENTER)
@@ -600,7 +594,7 @@ class window(Tk):
             fg=self.front,
             command=self.exitFinance,
             relief=SUNKEN,
-            font=("Arial", 15)
+            font=("Arial", 15),
         )
 
         self.backFrame.place(relx=0.5, rely=0.9, anchor=CENTER)
@@ -682,10 +676,7 @@ class window(Tk):
                               background=self.back)
         self.medFrame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-        self.sosFrame = Frame(self.medFrame,
-                              height=80,
-                              width=80,
-                              bg=self.back)
+        self.sosFrame = Frame(self.medFrame, height=80, width=80, bg=self.back)
 
         self.sosButton = Button(
             self.sosFrame,
@@ -693,7 +684,7 @@ class window(Tk):
             bg=self.back,
             command=lambda: self.SOS("+918073289563"),
             relief=SUNKEN,
-            font=("Arial", 15)
+            font=("Arial", 15),
         )
 
         self.sosFrame.place(relx=0.085, rely=0.9495, anchor=CENTER)
@@ -711,7 +702,7 @@ class window(Tk):
             fg=self.front,
             command=self.exitMedicine,
             relief=SUNKEN,
-            font=("Arial", 15)
+            font=("Arial", 15),
         )
 
         self.backFrame.place(relx=0.5, rely=0.9, anchor=CENTER)
@@ -719,8 +710,8 @@ class window(Tk):
         self.medLabelList = []
 
         for i in range(len(self.medicineList)):
-            t = ("Name: " + self.medicineList[i]["name"] + "    " +
-                 "Times: " + ", ".join(self.medicineList[i]["time"]) + "\n" +
+            t = ("Name: " + self.medicineList[i]["name"] + "    " + "Times: " +
+                 ", ".join(self.medicineList[i]["time"]) + "\n" +
                  "Per Tablet: " + self.medicineList[i]["dosage"] + "    " +
                  "Left: " + str(self.medicineList[i]["inventory"]))
             self.medLabelList.append(
@@ -796,7 +787,7 @@ class window(Tk):
                     "dosage": x[i]["dosage"],
                     "inventory": x[i]["inventory"],
                 })
-            
+
             newfile = open("/home/pi/Desktop/Ajjisstant-GUI/medicines.txt",
                            "wb")
             pickle.dump(self.medicineList, newfile)
@@ -805,7 +796,7 @@ class window(Tk):
             self.medTimeDict = {}
             for i in x:
                 self.medTimeDict[i] = x[i]["time"]
-            
+
             self.medTimes = set()
             for i in x:
                 for j in x[i]["time"]:
@@ -816,7 +807,7 @@ class window(Tk):
             self.medTimeDict = {}
             for i in self.medicineList:
                 self.medTimeDict[i["name"]] = i["time"]
-            
+
             self.medTimes = set()
             for i in self.medicineList:
                 for j in i["time"]:
